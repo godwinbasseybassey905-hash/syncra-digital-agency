@@ -85,9 +85,48 @@ export default function BlogPostPage({ slug }) {
 
   useEffect(() => {
     if (post?.title) {
-      document.title = `${post.title} | Syncra Digital Agency`;
+      const fullTitle = `${post.title} | Syncra Digital Agency`;
+      const desc =
+        post.excerpt ||
+        'Thoughtful perspectives, practical guides, and ideas from Syncra Digital Agency.';
+      const canonicalUrl = `https://syncra-digital-agency.vercel.app/insights/${encodeURIComponent(
+        post.slug || slug
+      )}`;
+
+      document.title = fullTitle;
+
+      const updateMetaTag = (attribute, name, content) => {
+        let el = document.querySelector(`meta[${attribute}="${name}"]`);
+        if (!el) {
+          el = document.createElement('meta');
+          el.setAttribute(attribute, name);
+          document.head.appendChild(el);
+        }
+        el.setAttribute('content', content);
+      };
+
+      const updateLinkTag = (rel, href) => {
+        let el = document.querySelector(`link[rel="${rel}"]`);
+        if (!el) {
+          el = document.createElement('link');
+          el.setAttribute(rel, rel);
+          document.head.appendChild(el);
+        }
+        el.setAttribute('href', href);
+      };
+
+      updateMetaTag('name', 'description', desc);
+      updateMetaTag('name', 'robots', 'index, follow');
+      updateLinkTag('canonical', canonicalUrl);
+      updateMetaTag('property', 'og:title', fullTitle);
+      updateMetaTag('property', 'og:description', desc);
+      updateMetaTag('property', 'og:url', canonicalUrl);
+      updateMetaTag('property', 'og:type', 'article');
+      updateMetaTag('name', 'twitter:title', fullTitle);
+      updateMetaTag('name', 'twitter:description', desc);
+      updateMetaTag('name', 'twitter:url', canonicalUrl);
     }
-  }, [post]);
+  }, [post, slug]);
 
   useEffect(() => {
     if (!post) return;

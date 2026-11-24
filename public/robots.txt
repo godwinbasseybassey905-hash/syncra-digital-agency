@@ -1,5 +1,8 @@
-
 User-agent: *
 Allow: /
 
+# Disallow private admin routes
 Disallow: /syncra-admin
+Disallow: /syncra-admin/
+
+Sitemap: https://syncra-digital-agency.vercel.app/sitemap.xml
